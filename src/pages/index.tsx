@@ -20,8 +20,11 @@ export default function Home() {
         <Typography variant="h4" component="h1" gutterBottom>
           Material UI - Next.js example in TypeScript
         </Typography>
-        <Link href="/about" color="secondary">
-          Go to the about page
+        <Link href="/sign-in" color="secondary">
+          Go to the sign-in page
+        </Link>
+        <Link href="/sign-up" color="secondary">
+          Go to the sign-up page
         </Link>
       </Box>
     </Container>
