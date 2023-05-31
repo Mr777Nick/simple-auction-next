@@ -3,14 +3,22 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev -p 4000",
     "build": "next build",
-    "start": "next start -p 4000",
+    "precommit": "lint-staged && npm run lint",
+    "commit": "cz",
+    "dev": "next dev -p 4000",
     "eslint:check": "next lint",
     "eslint:fix": "npm run eslint:check -- --fix",
     "lint": "npm run eslint:check && npm run prettier:check",
+    "prepare": "husky install",
     "prettier:check": "prettier --check ./**/*.{ts,js,json,*rc}",
-    "prettier:write": "prettier --write ./**/*.{ts,js,json,*rc}"
+    "prettier:write": "prettier --write ./**/*.{ts,js,json,*rc}",
+    "start": "next start -p 4000"
+  },
+  "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-conventional-changelog"
+    }
   },
   "dependencies": {
     "@types/node": "20.2.5",
@@ -24,7 +32,13 @@
     "typescript": "5.0.4"
   },
   "devDependencies": {
+    "@commitlint/cli": "^17.6.5",
+    "@commitlint/config-conventional": "^17.6.5",
+    "cz-conventional-changelog": "^3.3.0",
     "eslint-config-prettier": "^8.8.0",
+    "eslint-plugin-prettier": "^4.2.1",
+    "husky": "^8.0.3",
+    "lint-staged": "^13.2.2",
     "prettier": "^2.8.8"
   }
 }
