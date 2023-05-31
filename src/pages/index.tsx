@@ -3,7 +3,7 @@ import Container from '@mui/material/Container';
 import Typography from '@mui/material/Typography';
 import * as React from 'react';
 
-import Link from '../components/link/Link';
+import Link from '../components/link';
 
 export default function Home() {
   return (

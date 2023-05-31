@@ -9,7 +9,7 @@ import Document, {
   NextScript,
 } from 'next/document';
 
-import createEmotionCache from '../config/createEmotionCache';
+import createEmotionCache from '../config/create-emotion-cache';
 import theme, { roboto } from '../config/theme';
 
 import { MyAppProps } from './_app';

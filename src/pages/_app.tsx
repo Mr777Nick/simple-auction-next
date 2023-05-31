@@ -3,7 +3,7 @@ import CssBaseline from '@mui/material/CssBaseline';
 import type { AppProps } from 'next/app';
 import Head from 'next/head';
 
-import createEmotionCache from '../config/createEmotionCache';
+import createEmotionCache from '../config/create-emotion-cache';
 import theme from '../config/theme';
 
 const clientSideEmotionCache = createEmotionCache();
