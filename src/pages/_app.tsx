@@ -2,6 +2,7 @@ import { CacheProvider, EmotionCache, ThemeProvider } from '@emotion/react';
 import CssBaseline from '@mui/material/CssBaseline';
 import type { AppProps } from 'next/app';
 import Head from 'next/head';
+import NextNProgress from 'nextjs-progressbar';
 
 import createEmotionCache from '../config/create-emotion-cache';
 import theme from '../config/theme';
@@ -23,6 +24,10 @@ export default function App(props: MyAppProps) {
         </Head>
         <ThemeProvider theme={theme}>
           <CssBaseline />
+          <NextNProgress
+            color={theme.palette.primary.main}
+            options={{ showSpinner: false }}
+          />
           <Component {...pageProps} />;
         </ThemeProvider>
       </CacheProvider>
