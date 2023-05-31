@@ -11,8 +11,8 @@
     "eslint:fix": "npm run eslint:check -- --fix",
     "lint": "npm run eslint:check && npm run prettier:check",
     "prepare": "husky install",
-    "prettier:check": "prettier --check ./**/*.{ts,js,json,*rc}",
-    "prettier:write": "prettier --write ./**/*.{ts,js,json,*rc}",
+    "prettier:check": "prettier --check ./**/*.{js,jsx,ts,tsx,json,*rc}",
+    "prettier:write": "prettier --write ./**/*.{js,jsx,ts,tsx,json,*rc}",
     "start": "next start -p 4000"
   },
   "config": {
@@ -36,6 +36,7 @@
     "@commitlint/config-conventional": "^17.6.5",
     "cz-conventional-changelog": "^3.3.0",
     "eslint-config-prettier": "^8.8.0",
+    "eslint-plugin-import": "^2.27.5",
     "eslint-plugin-prettier": "^4.2.1",
     "husky": "^8.0.3",
     "lint-staged": "^13.2.2",
