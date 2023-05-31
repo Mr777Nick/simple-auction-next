@@ -11,7 +11,7 @@ const buildPrettierCommand = (filenames) =>
     .join(' ')}`;
 
 module.exports = {
-  '**/*.(ts|tsx)': () => 'yarn tsc --noEmit',
+  '**/*.(ts|tsx)': () => 'tsc --noEmit',
   '*.{js,jsx,ts,tsx}': [buildEslintCommand],
   './**/*.{js,jsx,ts,tsx,json,*rc}': [buildPrettierCommand],
   'package.json': ['npx -y sort-package-json'],
