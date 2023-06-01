@@ -6,6 +6,7 @@ import NextNProgress from 'nextjs-progressbar';
 
 import createEmotionCache from '../config/create-emotion-cache';
 import theme from '../config/theme';
+import { AuthContextProvider } from '../libs/context/auth';
 
 const clientSideEmotionCache = createEmotionCache();
 
@@ -23,12 +24,14 @@ export default function App(props: MyAppProps) {
           <meta name="viewport" content="initial-scale=1, width=device-width" />
         </Head>
         <ThemeProvider theme={theme}>
-          <CssBaseline />
-          <NextNProgress
-            color={theme.palette.primary.main}
-            options={{ showSpinner: false }}
-          />
-          <Component {...pageProps} />;
+          <AuthContextProvider authName="easyAuction">
+            <CssBaseline />
+            <NextNProgress
+              color={theme.palette.primary.main}
+              options={{ showSpinner: false }}
+            />
+            <Component {...pageProps} />;
+          </AuthContextProvider>
         </ThemeProvider>
       </CacheProvider>
     </>
