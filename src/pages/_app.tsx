@@ -3,6 +3,7 @@ import CssBaseline from '@mui/material/CssBaseline';
 import type { AppProps } from 'next/app';
 import Head from 'next/head';
 import NextNProgress from 'nextjs-progressbar';
+import { SnackbarProvider } from 'notistack';
 import { SWRConfig } from 'swr';
 
 import createEmotionCache from '../config/create-emotion-cache';
@@ -26,20 +27,22 @@ export default function App(props: MyAppProps) {
           <meta name="viewport" content="initial-scale=1, width=device-width" />
         </Head>
         <ThemeProvider theme={theme}>
-          <AuthContextProvider authName="easyAuction">
-            <SWRConfig
-              value={{
-                fetcher: fetcher,
-              }}
-            >
-              <CssBaseline />
-              <NextNProgress
-                color={theme.palette.primary.main}
-                options={{ showSpinner: false }}
-              />
-              <Component {...pageProps} />;
-            </SWRConfig>
-          </AuthContextProvider>
+          <SnackbarProvider>
+            <AuthContextProvider authName="easyAuction">
+              <SWRConfig
+                value={{
+                  fetcher: fetcher,
+                }}
+              >
+                <CssBaseline />
+                <NextNProgress
+                  color={theme.palette.primary.main}
+                  options={{ showSpinner: false }}
+                />
+                <Component {...pageProps} />;
+              </SWRConfig>
+            </AuthContextProvider>
+          </SnackbarProvider>
         </ThemeProvider>
       </CacheProvider>
     </>

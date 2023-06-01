@@ -11,6 +11,7 @@ import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import { capitalize } from '@mui/material/utils';
 import { useRouter } from 'next/router';
+import { enqueueSnackbar } from 'notistack';
 import * as React from 'react';
 import { useEffect } from 'react';
 import { Controller, useForm } from 'react-hook-form';
@@ -51,7 +52,7 @@ export default function SignUpLayout() {
   });
 
   const { trigger, data, error, isMutating } = useSWRMutation<
-    BackendResponse<TokenInfo>,
+    BackendResponse<null>,
     Error,
     BackendCallURL,
     SignUpBackendCall
@@ -65,6 +66,7 @@ export default function SignUpLayout() {
 
   useEffect(() => {
     if (data) {
+      enqueueSnackbar(data.message, { variant: 'success' });
       router.push(
         {
           pathname: ROUTES.SIGNIN,
