@@ -1,28 +1,40 @@
+import { yupResolver } from '@hookform/resolvers/yup';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Avatar from '@mui/material/Avatar';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
-import Checkbox from '@mui/material/Checkbox';
 import Container from '@mui/material/Container';
-import FormControlLabel from '@mui/material/FormControlLabel';
 import Grid from '@mui/material/Grid';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
+import { capitalize } from '@mui/material/utils';
 import * as React from 'react';
+import { Controller, useForm } from 'react-hook-form';
+import * as yup from 'yup';
 
 import Copyright from '../../components/copyright';
 import Link from '../../components/link';
 import { ROUTES } from '../../enums/routes';
 
+const schema = yup.object({
+  name: yup.string().required(),
+  email: yup.string().email().required(),
+  password: yup.string().min(8).required(),
+});
+
+export type SignUpFormValue = yup.InferType<typeof schema>;
+
 export default function SignUp() {
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get('email'),
-      password: data.get('password'),
-    });
-  };
+  const {
+    handleSubmit,
+    formState: { errors },
+    control,
+  } = useForm<SignUpFormValue>({
+    resolver: yupResolver(schema),
+    mode: 'all',
+  });
+
+  const onSubmit = (data: any) => console.log(data);
 
   return (
     <Container component="main" maxWidth="xs">
@@ -40,35 +52,83 @@ export default function SignUp() {
         <Typography component="h1" variant="h5">
           Sign up
         </Typography>
-        <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
-          <TextField
-            margin="normal"
-            autoComplete="name"
+        <Box
+          component="form"
+          noValidate
+          onSubmit={handleSubmit(onSubmit)}
+          sx={{ mt: 3 }}
+        >
+          <Controller
             name="name"
-            required
-            fullWidth
-            id="name"
-            label="Name"
-            autoFocus
+            control={control}
+            render={({ field: { onChange, onBlur, value } }) => (
+              <TextField
+                margin="normal"
+                autoComplete="name"
+                required
+                fullWidth
+                id="name"
+                error={!!errors.name}
+                helperText={
+                  errors.name?.message ? capitalize(errors.name?.message) : null
+                }
+                label="Name"
+                placeholder={'Your name'}
+                autoFocus
+                value={value}
+                onChange={onChange}
+                onBlur={onBlur}
+              />
+            )}
           />
-          <TextField
-            margin="normal"
-            required
-            fullWidth
-            id="email"
-            label="Email Address"
+          <Controller
             name="email"
-            autoComplete="email"
+            control={control}
+            render={({ field: { onChange, onBlur, value } }) => (
+              <TextField
+                margin="normal"
+                required
+                fullWidth
+                id="email"
+                error={!!errors.email}
+                helperText={
+                  errors.email?.message
+                    ? capitalize(errors.email?.message)
+                    : null
+                }
+                label="Email"
+                placeholder={'Your email'}
+                autoFocus
+                value={value}
+                onChange={onChange}
+                onBlur={onBlur}
+              />
+            )}
           />
-          <TextField
-            margin="normal"
-            required
-            fullWidth
+          <Controller
             name="password"
-            label="Password"
-            type="password"
-            id="password"
-            autoComplete="new-password"
+            control={control}
+            render={({ field: { onChange, onBlur, value } }) => (
+              <TextField
+                margin="normal"
+                autoComplete="new-password"
+                required
+                fullWidth
+                id="password"
+                error={!!errors.password}
+                helperText={
+                  errors.password?.message
+                    ? capitalize(errors.password?.message)
+                    : null
+                }
+                label="Password"
+                placeholder={'Your password'}
+                autoFocus
+                value={value}
+                onChange={onChange}
+                onBlur={onBlur}
+              />
+            )}
           />
           <Button
             type="submit"
