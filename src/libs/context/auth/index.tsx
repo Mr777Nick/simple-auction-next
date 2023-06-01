@@ -1,4 +1,4 @@
-import { getCookie, removeCookies, setCookies } from 'cookies-next';
+import { deleteCookie, getCookie, setCookie } from 'cookies-next';
 import {
   ReactNode,
   createContext,
@@ -9,13 +9,7 @@ import {
   useState,
 } from 'react';
 
-type TokenInfo = {
-  token: string;
-  expiresIn: number;
-  expiresAt: number;
-  tokenType: string;
-  refreshToken?: string;
-};
+import { TokenInfo } from '../../types/token-info';
 
 export const AuthContext = createContext<null | {
   isContextInitialised: boolean;
@@ -41,11 +35,11 @@ export const AuthContextProvider = (props: {
 
       setTokenInfo(tokenInfo);
 
-      setCookies(`token_${authName}`, token);
-      setCookies(`expiresIn_${authName}`, expiresIn);
-      setCookies(`expiresAt_${authName}`, expiresAt);
-      setCookies(`tokenType_${authName}`, tokenType);
-      setCookies(`refreshToken_${authName}`, refreshToken);
+      setCookie(`token_${authName}`, token);
+      setCookie(`expiresIn_${authName}`, expiresIn);
+      setCookie(`expiresAt_${authName}`, expiresAt);
+      setCookie(`tokenType_${authName}`, tokenType);
+      setCookie(`refreshToken_${authName}`, refreshToken);
     },
     [authName],
   );
@@ -53,11 +47,11 @@ export const AuthContextProvider = (props: {
   const handleSignOut = useCallback(() => {
     setTokenInfo(null);
 
-    removeCookies(`token_${authName}`);
-    removeCookies(`expiresIn_${authName}`);
-    removeCookies(`expiresAt_${authName}`);
-    removeCookies(`tokenType_${authName}`);
-    removeCookies(`refreshToken_${authName}`);
+    deleteCookie(`token_${authName}`);
+    deleteCookie(`expiresIn_${authName}`);
+    deleteCookie(`expiresAt_${authName}`);
+    deleteCookie(`tokenType_${authName}`);
+    deleteCookie(`refreshToken_${authName}`);
   }, [authName]);
 
   useEffect(() => {

@@ -3,10 +3,12 @@ import CssBaseline from '@mui/material/CssBaseline';
 import type { AppProps } from 'next/app';
 import Head from 'next/head';
 import NextNProgress from 'nextjs-progressbar';
+import { SWRConfig } from 'swr';
 
 import createEmotionCache from '../config/create-emotion-cache';
 import theme from '../config/theme';
 import { AuthContextProvider } from '../libs/context/auth';
+import { fetcher } from '../libs/utils/fetcher';
 
 const clientSideEmotionCache = createEmotionCache();
 
@@ -25,12 +27,18 @@ export default function App(props: MyAppProps) {
         </Head>
         <ThemeProvider theme={theme}>
           <AuthContextProvider authName="easyAuction">
-            <CssBaseline />
-            <NextNProgress
-              color={theme.palette.primary.main}
-              options={{ showSpinner: false }}
-            />
-            <Component {...pageProps} />;
+            <SWRConfig
+              value={{
+                fetcher: fetcher,
+              }}
+            >
+              <CssBaseline />
+              <NextNProgress
+                color={theme.palette.primary.main}
+                options={{ showSpinner: false }}
+              />
+              <Component {...pageProps} />;
+            </SWRConfig>
           </AuthContextProvider>
         </ThemeProvider>
       </CacheProvider>
