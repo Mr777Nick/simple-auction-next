@@ -8,6 +8,7 @@ import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
+import { useRouter } from 'next/router';
 import * as React from 'react';
 import { useEffect } from 'react';
 import { Controller, useForm } from 'react-hook-form';
@@ -36,15 +37,23 @@ export type SignInFormValue = yup.InferType<typeof schema>;
 
 export default function SignInLayout() {
   const { signIn } = useAuthContext();
+  const router = useRouter();
 
   const {
     handleSubmit,
     formState: { errors },
     control,
+    setValue,
   } = useForm<SignInFormValue>({
     resolver: yupResolver(schema),
     mode: 'all',
   });
+
+  useEffect(() => {
+    if (router.query.email) {
+      setValue('email', router.query.email.toString());
+    }
+  }, [router.query.email, setValue]);
 
   const { trigger, data, error, isMutating } = useSWRMutation<
     BackendResponse<TokenInfo>,
@@ -106,7 +115,6 @@ export default function SignInLayout() {
           <Controller
             name="email"
             control={control}
-            defaultValue=""
             render={({ field: { onChange, onBlur, value } }) => (
               <TextField
                 margin="normal"
@@ -132,7 +140,6 @@ export default function SignInLayout() {
           <Controller
             name="password"
             control={control}
-            defaultValue=""
             render={({ field: { onChange, onBlur, value } }) => (
               <TextField
                 margin="normal"
