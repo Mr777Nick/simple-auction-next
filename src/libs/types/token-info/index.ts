@@ -1,7 +1,7 @@
 export type TokenInfo = {
-  token: string;
-  expiresIn: number;
-  expiresAt: number;
-  tokenType: string;
-  refreshToken?: string;
+  access_token: string;
+  expires_in: number;
+  expires_at: number;
+  token_type: string;
+  refresh_token?: string;
 };

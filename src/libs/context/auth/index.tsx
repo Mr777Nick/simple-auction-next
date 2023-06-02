@@ -30,16 +30,21 @@ export const AuthContextProvider = (props: {
 
   const persistTokenInfo = useCallback(
     (tokenInfo: TokenInfo) => {
-      const { token, expiresIn, expiresAt, tokenType, refreshToken } =
-        tokenInfo;
+      const {
+        access_token,
+        expires_in,
+        expires_at,
+        token_type,
+        refresh_token,
+      } = tokenInfo;
 
       setTokenInfo(tokenInfo);
 
-      setCookie(`token_${authName}`, token);
-      setCookie(`expiresIn_${authName}`, expiresIn);
-      setCookie(`expiresAt_${authName}`, expiresAt);
-      setCookie(`tokenType_${authName}`, tokenType);
-      setCookie(`refreshToken_${authName}`, refreshToken);
+      setCookie(`access_token_${authName}`, access_token);
+      setCookie(`expires_in_${authName}`, expires_in);
+      setCookie(`expires_at_${authName}`, expires_at);
+      setCookie(`token_type_${authName}`, token_type);
+      setCookie(`refresh_token_${authName}`, refresh_token);
     },
     [authName],
   );
@@ -47,11 +52,11 @@ export const AuthContextProvider = (props: {
   const handleSignOut = useCallback(() => {
     setTokenInfo(null);
 
-    deleteCookie(`token_${authName}`);
-    deleteCookie(`expiresIn_${authName}`);
-    deleteCookie(`expiresAt_${authName}`);
-    deleteCookie(`tokenType_${authName}`);
-    deleteCookie(`refreshToken_${authName}`);
+    deleteCookie(`access_token_${authName}`);
+    deleteCookie(`expires_in_${authName}`);
+    deleteCookie(`expires_at_${authName}`);
+    deleteCookie(`token_type_${authName}`);
+    deleteCookie(`refresh_token_${authName}`);
   }, [authName]);
 
   useEffect(() => {
@@ -61,19 +66,19 @@ export const AuthContextProvider = (props: {
   }, [handleSignOut, tokenInfo]);
 
   useEffect(() => {
-    const token = getCookie(`token_${authName}`)?.toString();
-    const expiresIn = Number(getCookie(`expiresIn_${authName}`));
-    const expiresAt = Number(getCookie(`expiresAt_${authName}`));
-    const tokenType = getCookie(`tokenType_${authName}`)?.toString();
-    const refreshToken = getCookie(`refreshToken_${authName}`)?.toString();
+    const access_token = getCookie(`token_${authName}`)?.toString();
+    const expires_in = Number(getCookie(`expires_in_${authName}`));
+    const expires_at = Number(getCookie(`expires_at_${authName}`));
+    const token_type = getCookie(`token_type_${authName}`)?.toString();
+    const refresh_token = getCookie(`refresh_token_${authName}`)?.toString();
 
-    if (token && expiresIn && expiresAt && tokenType) {
+    if (access_token && expires_in && expires_at && token_type) {
       setTokenInfo({
-        token,
-        expiresIn,
-        expiresAt,
-        tokenType,
-        refreshToken,
+        access_token,
+        expires_in,
+        expires_at,
+        token_type,
+        refresh_token,
       });
     } else {
       setInitialised(true);

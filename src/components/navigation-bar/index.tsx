@@ -20,6 +20,7 @@ import * as React from 'react';
 
 import { APP_NAME } from '../../constants/app-name';
 import { ROUTES } from '../../enums/routes';
+import { useAuthContext } from '../../libs/context/auth';
 
 import NavigationItem from './navigation-item';
 import LogoutNavigationItem from './sign-out';
@@ -98,6 +99,8 @@ export default function NavigationBar({
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
 
+  const { isContextInitialised, tokenInfo } = useAuthContext();
+
   const handleDrawerOpen = () => {
     setOpen(true);
   };
@@ -106,7 +109,7 @@ export default function NavigationBar({
     setOpen(false);
   };
 
-  if (!show) {
+  if (!isContextInitialised || !tokenInfo || !show) {
     return <>{children}</>;
   }
 
