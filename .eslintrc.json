@@ -5,7 +5,7 @@
     "plugin:prettier/recommended"
   ],
   "plugins": ["prettier", "import", "filenames", "folders"],
-  "ignorePatterns": [".eslintrc.json"],
+  "ignorePatterns": [".eslintrc.json", "next.config.js"],
   "rules": {
     "sort-imports": [
       "error",

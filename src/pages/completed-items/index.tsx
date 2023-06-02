@@ -1,7 +1,12 @@
 import * as React from 'react';
 
+import CompletedItemsLayout from '../../layouts/completed-items';
 import { AuthGuard } from '../../libs/guard/auth';
 
 export default function CompletedItems() {
-  return <AuthGuard>Completed Items</AuthGuard>;
+  return (
+    <AuthGuard>
+      <CompletedItemsLayout />
+    </AuthGuard>
+  );
 }

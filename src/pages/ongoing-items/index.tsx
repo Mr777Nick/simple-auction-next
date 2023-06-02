@@ -1,7 +1,14 @@
 import * as React from 'react';
 
+import OngoingItemsLayout from '../../layouts/ongoing-items';
 import { AuthGuard } from '../../libs/guard/auth';
 
-export default function OngoingItems() {
-  return <AuthGuard>Ongoing Items</AuthGuard>;
+function OngoingItems() {
+  return (
+    <AuthGuard>
+      <OngoingItemsLayout />
+    </AuthGuard>
+  );
 }
+
+export default OngoingItems;

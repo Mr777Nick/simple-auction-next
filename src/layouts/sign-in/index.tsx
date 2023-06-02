@@ -70,15 +70,20 @@ export default function SignInLayout() {
 
   useEffect(() => {
     if (data && data.data) {
-      const { token, expiresAt, expiresIn, tokenType, refreshToken } =
-        data.data;
+      const {
+        access_token,
+        expires_at,
+        expires_in,
+        token_type,
+        refresh_token,
+      } = data.data;
 
       signIn({
-        token,
-        expiresAt,
-        expiresIn,
-        tokenType,
-        refreshToken,
+        access_token: access_token,
+        expires_at: expires_at,
+        expires_in: expires_in,
+        token_type: token_type,
+        refresh_token: refresh_token,
       });
     }
   }, [data, signIn]);

@@ -66,7 +66,7 @@ export const AuthContextProvider = (props: {
   }, [handleSignOut, tokenInfo]);
 
   useEffect(() => {
-    const access_token = getCookie(`token_${authName}`)?.toString();
+    const access_token = getCookie(`access_token_${authName}`)?.toString();
     const expires_in = Number(getCookie(`expires_in_${authName}`));
     const expires_at = Number(getCookie(`expires_at_${authName}`));
     const token_type = getCookie(`token_type_${authName}`)?.toString();
