@@ -2,12 +2,15 @@ import { CacheProvider, EmotionCache, ThemeProvider } from '@emotion/react';
 import CssBaseline from '@mui/material/CssBaseline';
 import type { AppProps } from 'next/app';
 import Head from 'next/head';
+import { useRouter } from 'next/router';
 import NextNProgress from 'nextjs-progressbar';
 import { SnackbarProvider } from 'notistack';
 import { SWRConfig } from 'swr';
 
+import NavigationBar from '../components/navigation-bar';
 import createEmotionCache from '../config/create-emotion-cache';
 import theme from '../config/theme';
+import { ROUTES } from '../enums/routes';
 import { AuthContextProvider } from '../libs/context/auth';
 import { fetcher } from '../libs/utils/fetcher';
 
@@ -19,6 +22,19 @@ export interface MyAppProps extends AppProps {
 
 export default function App(props: MyAppProps) {
   const { Component, emotionCache = clientSideEmotionCache, pageProps } = props;
+
+  const router = useRouter();
+
+  const shouldShowNavBar = () => {
+    if (
+      router.pathname.includes(ROUTES.SIGNIN) ||
+      router.pathname.includes(ROUTES.SIGNUP)
+    ) {
+      return false;
+    }
+
+    return true;
+  };
 
   return (
     <>
@@ -39,7 +55,9 @@ export default function App(props: MyAppProps) {
                   color={theme.palette.primary.main}
                   options={{ showSpinner: false }}
                 />
-                <Component {...pageProps} />;
+                <NavigationBar show={shouldShowNavBar()}>
+                  <Component {...pageProps} />
+                </NavigationBar>
               </SWRConfig>
             </AuthContextProvider>
           </SnackbarProvider>

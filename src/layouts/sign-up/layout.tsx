@@ -28,7 +28,6 @@ import {
 } from '../../libs/api/backend-apis/auth';
 import { BackendCallURL } from '../../libs/types/backend-call';
 import { BackendResponse } from '../../libs/types/backend-response';
-import { TokenInfo } from '../../libs/types/token-info';
 
 const schema = yup.object({
   name: yup.string().required(),

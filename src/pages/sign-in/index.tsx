@@ -1,8 +1,7 @@
 import * as React from 'react';
 
+import SignInLayout from '../../layouts/sign-in/layout';
 import { AuthGuard } from '../../libs/guard/auth';
-
-import SignInLayout from './layout';
 
 export default function SignIn() {
   return (

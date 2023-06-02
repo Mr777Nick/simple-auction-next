@@ -1,5 +1,6 @@
 import Typography from '@mui/material/Typography';
 
+import { APP_NAME } from '../../constants/app-name';
 import Link from '../link';
 
 export default function Copyright(props: any) {
@@ -12,7 +13,7 @@ export default function Copyright(props: any) {
     >
       {'Copyright © '}
       <Link color="inherit" href="#">
-        EasyAuction
+        {APP_NAME}
       </Link>{' '}
       {new Date().getFullYear()}
       {'.'}
