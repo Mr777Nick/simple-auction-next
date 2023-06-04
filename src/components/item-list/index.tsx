@@ -80,7 +80,11 @@ export default function ItemList(props: ItemListProps) {
               return items.map((item) => {
                 return (
                   <Fragment key={item.id}>
-                    <ItemListItem item={item} variant={variant} />
+                    <ItemListItem
+                      item={item}
+                      variant={variant}
+                      onSuccessEdit={mutate}
+                    />
                   </Fragment>
                 );
               });

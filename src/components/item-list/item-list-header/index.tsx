@@ -118,7 +118,7 @@ export default function ItemListHeader({
       <Grid
         container
         item
-        xs={3}
+        xs={2}
         padding={theme.spacing(2)}
         justifyContent={'center'}
       >
@@ -133,6 +133,13 @@ export default function ItemListHeader({
       >
         <Typography variant="body1">Sold Price</Typography>
       </Grid>
+      <Grid
+        container
+        item
+        xs={1}
+        padding={theme.spacing(2)}
+        justifyContent={'flex-end'}
+      ></Grid>
     </>
   );
 }

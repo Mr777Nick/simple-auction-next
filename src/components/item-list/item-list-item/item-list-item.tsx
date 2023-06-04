@@ -1,16 +1,22 @@
+import EditIcon from '@mui/icons-material/Edit';
 import Button from '@mui/material/Button';
 import Grid from '@mui/material/Grid';
+import IconButton from '@mui/material/IconButton';
 import Paper from '@mui/material/Paper';
+import Tooltip from '@mui/material/Tooltip';
 import Typography from '@mui/material/Typography';
 import { useEffect, useState } from 'react';
 
 import theme from '../../../config/theme';
 import { Item, ItemStatus } from '../../../libs/types/item';
+import CreateUpdateItemDialog from '../../dialog/create-update-item';
 
 export default function ItemListItem({
+  onSuccessEdit,
   item,
   variant,
 }: {
+  onSuccessEdit: () => void;
   item: Item;
   variant: 'ongoing' | 'completed' | 'my';
 }) {
@@ -18,6 +24,7 @@ export default function ItemListItem({
     item;
 
   const [timeRemaining, setTimeRemaining] = useState<number | null>(null);
+  const [openUpdateDialog, setOpenUpdateDialog] = useState(false);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -103,43 +110,71 @@ export default function ItemListItem({
   }
 
   return (
-    <Grid
-      container
-      item
-      xs={12}
-      component={Paper}
-      marginTop={theme.spacing(1)}
-      marginBottom={theme.spacing(1)}
-      padding={theme.spacing(2)}
-      alignItems={'center'}
-    >
-      <Grid container item xs={3}>
-        <Typography variant="body1">{name}</Typography>
+    <>
+      <Grid
+        container
+        item
+        xs={12}
+        component={Paper}
+        marginTop={theme.spacing(1)}
+        marginBottom={theme.spacing(1)}
+        padding={theme.spacing(2)}
+        alignItems={'center'}
+      >
+        <Grid container item xs={3}>
+          <Typography variant="body1">{name}</Typography>
+        </Grid>
+        <Grid container item xs={2} justifyContent={'center'}>
+          <Typography variant="body1">{`$ ${startPrice}`}</Typography>
+        </Grid>
+        <Grid container item xs={2} justifyContent={'center'}>
+          <Typography variant="body1">
+            {currentPrice != startPrice ? `$ ${currentPrice}` : 'No Bid'}
+          </Typography>
+        </Grid>
+        <Grid container item xs={2} justifyContent={'center'}>
+          <Typography variant="body1">
+            {status === ItemStatus.ACTIVE
+              ? `${hourRemaining ?? '--'}h ${minuteRemaining ?? '--'}m ${
+                  secondRemaining ?? '--'
+                }s`
+              : `${new Date(endedAt).toLocaleDateString()} ${new Date(
+                  endedAt,
+                ).toLocaleTimeString()}`}
+          </Typography>
+        </Grid>
+        <Grid container item xs={2} justifyContent={'flex-end'}>
+          <Typography variant="body1">
+            {soldPrice ? `$ ${soldPrice ?? 0}` : 'Not Sold'}
+          </Typography>
+        </Grid>
+        <Grid container item xs={1} justifyContent={'flex-end'}>
+          <Tooltip
+            title={
+              status !== ItemStatus.ACTIVE
+                ? 'Completed item cannot be edited'
+                : ''
+            }
+          >
+            <span>
+              <IconButton
+                disabled={status !== ItemStatus.ACTIVE}
+                color={'primary'}
+                onClick={() => setOpenUpdateDialog(true)}
+              >
+                <EditIcon />
+              </IconButton>
+            </span>
+          </Tooltip>
+        </Grid>
       </Grid>
-      <Grid container item xs={2} justifyContent={'center'}>
-        <Typography variant="body1">{`$ ${startPrice}`}</Typography>
-      </Grid>
-      <Grid container item xs={2} justifyContent={'center'}>
-        <Typography variant="body1">
-          {currentPrice != startPrice ? `$ ${currentPrice}` : 'No Bid'}
-        </Typography>
-      </Grid>
-      <Grid container item xs={3} justifyContent={'center'}>
-        <Typography variant="body1">
-          {status === ItemStatus.ACTIVE
-            ? `${hourRemaining ?? '--'}h ${minuteRemaining ?? '--'}m ${
-                secondRemaining ?? '--'
-              }s`
-            : `${new Date(endedAt).toLocaleDateString()} ${new Date(
-                endedAt,
-              ).toLocaleTimeString()}`}
-        </Typography>
-      </Grid>
-      <Grid container item xs={2} justifyContent={'flex-end'}>
-        <Typography variant="body1">
-          {soldPrice ? `$ ${soldPrice ?? 0}` : 'Not Sold'}
-        </Typography>
-      </Grid>
-    </Grid>
+      <CreateUpdateItemDialog
+        onSuccess={onSuccessEdit}
+        open={openUpdateDialog}
+        setOpen={setOpenUpdateDialog}
+        isEdit
+        item={item}
+      />
+    </>
   );
 }

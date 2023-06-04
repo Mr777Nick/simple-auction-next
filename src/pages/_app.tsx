@@ -46,7 +46,7 @@ export default function App(props: MyAppProps) {
         </Head>
         <ThemeProvider theme={theme}>
           <LocalizationProvider dateAdapter={AdapterDayjs}>
-            <SnackbarProvider>
+            <SnackbarProvider maxSnack={1}>
               <AuthContextProvider authName="easyAuction">
                 <SWRConfig
                   value={{

@@ -21,27 +21,31 @@ export async function getItems(url: RequestInfo | URL, init?: RequestInit) {
   return res.data.result;
 }
 
-export type CreateItemBackendCall = {
+export type CreateUpdateItemBackendCall = {
   name: string;
   startPrice: number;
   endedAt: Date;
+  isEdit: boolean;
+  id?: string;
   token?: string;
 };
 
-export async function createItemBackendCall(
+export async function createUpdateItemBackendCall(
   url: BackendCallURL,
-  { arg: { name, startPrice, endedAt, token } }: { arg: CreateItemBackendCall },
+  {
+    arg: { name, startPrice, endedAt, isEdit = false, id, token },
+  }: { arg: CreateUpdateItemBackendCall },
 ) {
   const fetchOptions = {
     headers: {
       'Content-Type': 'application/json',
       Authorization: `Bearer ${token}`,
     },
-    method: 'POST',
+    method: isEdit ? 'PATCH' : 'POST',
     body: JSON.stringify({ name, startPrice, endedAt }),
   };
 
-  const res = await fetch(url, fetchOptions);
+  const res = await fetch(isEdit ? `${url}/${id}` : url, fetchOptions);
 
   const response = await res.json();
 

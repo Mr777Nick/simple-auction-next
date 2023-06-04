@@ -7,6 +7,7 @@ import DialogContentText from '@mui/material/DialogContentText';
 import TextField from '@mui/material/TextField';
 import { capitalize } from '@mui/material/utils';
 import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
+import dayjs from 'dayjs';
 import { enqueueSnackbar } from 'notistack';
 import { useEffect, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
@@ -15,8 +16,8 @@ import * as yup from 'yup';
 
 import { backendRoutes } from '../../../../libs/api/backend/routes';
 import {
-  CreateItemBackendCall,
-  createItemBackendCall,
+  CreateUpdateItemBackendCall,
+  createUpdateItemBackendCall,
 } from '../../../../libs/api/backend-apis/items';
 import { useAuthContext } from '../../../../libs/context/auth';
 import { BackendCallURL } from '../../../../libs/types/backend-call';
@@ -24,6 +25,7 @@ import { BackendResponse } from '../../../../libs/types/backend-response';
 import { Item } from '../../../../libs/types/item';
 
 const schema = yup.object({
+  id: yup.string(),
   name: yup.string().required(),
   startPrice: yup.number().required(),
   endedAt: yup
@@ -52,11 +54,12 @@ type CreateUpdateItemDialogFormProps = {
   item?: Item;
 };
 
-export default function CreateUpdateItemDialogForm(
-  props: CreateUpdateItemDialogFormProps,
-) {
-  const { handleClose, onSuccess, isEdit, item } = props;
-
+export default function CreateUpdateItemDialogForm({
+  handleClose,
+  onSuccess,
+  isEdit = false,
+  item,
+}: CreateUpdateItemDialogFormProps) {
   const { tokenInfo } = useAuthContext();
 
   const {
@@ -73,12 +76,12 @@ export default function CreateUpdateItemDialogForm(
     BackendResponse<null>,
     Error,
     BackendCallURL,
-    CreateItemBackendCall
-  >(backendRoutes.items.all, createItemBackendCall);
+    CreateUpdateItemBackendCall
+  >(backendRoutes.items.all, createUpdateItemBackendCall);
 
   const onSubmit = async (data: CreateUpdateItemDialogFormValue) => {
     try {
-      await trigger({ ...data, token: tokenInfo?.access_token });
+      await trigger({ ...data, isEdit, token: tokenInfo?.access_token });
     } catch (error) {}
   };
 
@@ -88,14 +91,25 @@ export default function CreateUpdateItemDialogForm(
     if (data && !error && !isMutating) {
       if (!successActionTriggered) {
         handleClose();
-        enqueueSnackbar('Item created successfully', { variant: 'success' });
+        enqueueSnackbar(
+          isEdit ? 'Item updated successfully' : 'Item created successfully',
+          { variant: 'success' },
+        );
         if (onSuccess) onSuccess();
         setSuccessActionTriggered(true);
       }
     } else {
       setSuccessActionTriggered(false);
     }
-  }, [data, error, handleClose, isMutating, onSuccess, successActionTriggered]);
+  }, [
+    data,
+    error,
+    handleClose,
+    isEdit,
+    isMutating,
+    onSuccess,
+    successActionTriggered,
+  ]);
 
   useEffect(() => {
     if (error) {
@@ -104,6 +118,14 @@ export default function CreateUpdateItemDialogForm(
       });
     }
   }, [error]);
+
+  useEffect(() => {
+    if (item) {
+      setValue('name', item.name);
+      setValue('startPrice', item.startPrice);
+      setValue('endedAt', new Date(item.endedAt));
+    }
+  }, [item, setValue]);
 
   return (
     <Box
@@ -120,10 +142,17 @@ export default function CreateUpdateItemDialogForm(
           </DialogContentText>
         )}
         <Controller
+          name="id"
+          control={control}
+          defaultValue={isEdit ? item?.id : undefined}
+          render={({ field }) => <input type="hidden" {...field} />}
+        />
+        <Controller
           name="name"
           control={control}
           render={({ field: { onChange, onBlur, value } }) => (
             <TextField
+              disabled={isEdit}
               margin="dense"
               autoComplete="name"
               required
@@ -147,6 +176,7 @@ export default function CreateUpdateItemDialogForm(
           control={control}
           render={({ field: { onChange, onBlur, value } }) => (
             <TextField
+              disabled={isEdit}
               type="number"
               margin="dense"
               autoComplete="startPrice"
@@ -179,7 +209,7 @@ export default function CreateUpdateItemDialogForm(
                 minutesStep={60}
                 views={['year', 'month', 'day', 'hours']}
                 label="End Time"
-                value={field.value}
+                value={isEdit ? dayjs(field.value) : field.value}
                 onChange={field.onChange}
                 slotProps={{
                   textField: {
