@@ -10,12 +10,15 @@ import {
 } from 'react';
 
 import { TokenInfo } from '../../types/token-info';
+import { User } from '../../types/user';
 
 export const AuthContext = createContext<null | {
   isContextInitialised: boolean;
   tokenInfo: null | TokenInfo;
+  user: null | User;
   signIn: (tokenInfo: TokenInfo) => unknown;
   signOut: () => unknown;
+  saveUser: (user: User) => unknown;
 }>(null);
 
 export const AuthContextProvider = (props: {
@@ -27,6 +30,7 @@ export const AuthContextProvider = (props: {
   const [isContextInitialised, setInitialised] = useState(false);
 
   const [tokenInfo, setTokenInfo] = useState<TokenInfo | null>(null);
+  const [user, setUser] = useState<User | null>(null);
 
   const persistTokenInfo = useCallback(
     (tokenInfo: TokenInfo) => {
@@ -57,13 +61,28 @@ export const AuthContextProvider = (props: {
     deleteCookie(`expires_at_${authName}`);
     deleteCookie(`token_type_${authName}`);
     deleteCookie(`refresh_token_${authName}`);
+
+    setUser(null);
+
+    deleteCookie(`user_name_${authName}`);
+    deleteCookie(`user_balance_${authName}`);
   }, [authName]);
+
+  const persistUser = useCallback(
+    (user: User) => {
+      const { name, balance } = user;
+
+      setCookie(`user_name_${authName}`, name);
+      setCookie(`user_balance_${authName}`, balance);
+    },
+    [authName],
+  );
 
   useEffect(() => {
     if (tokenInfo) {
       setInitialised(true);
     }
-  }, [handleSignOut, tokenInfo]);
+  }, [tokenInfo]);
 
   useEffect(() => {
     const access_token = getCookie(`access_token_${authName}`)?.toString();
@@ -89,10 +108,19 @@ export const AuthContextProvider = (props: {
     () => ({
       isContextInitialised,
       tokenInfo,
+      user,
       signIn: persistTokenInfo,
       signOut: handleSignOut,
+      saveUser: persistUser,
     }),
-    [isContextInitialised, tokenInfo, persistTokenInfo, handleSignOut],
+    [
+      isContextInitialised,
+      tokenInfo,
+      user,
+      persistTokenInfo,
+      handleSignOut,
+      persistUser,
+    ],
   );
 
   return (

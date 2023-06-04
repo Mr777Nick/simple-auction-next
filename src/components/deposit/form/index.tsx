@@ -35,7 +35,6 @@ export default function DepositForm() {
     handleSubmit,
     formState: { errors },
     control,
-    setValue,
   } = useForm<DepositFormValue>({
     resolver: yupResolver(schema),
     mode: 'all',
