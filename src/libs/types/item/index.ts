@@ -9,6 +9,12 @@ export type Item = {
   name: string;
   soldPrice?: number;
   startPrice: number;
-  status: string;
+  status: ItemStatus;
   user: User;
 };
+
+export enum ItemStatus {
+  ACTIVE = 'ACTIVE',
+  INACTIVE = 'INACTIVE',
+  SOLD = 'SOLD',
+}

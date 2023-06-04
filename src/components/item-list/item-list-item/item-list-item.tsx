@@ -5,16 +5,17 @@ import Typography from '@mui/material/Typography';
 import { useEffect, useState } from 'react';
 
 import theme from '../../../config/theme';
-import { Item } from '../../../libs/types/item';
+import { Item, ItemStatus } from '../../../libs/types/item';
 
 export default function ItemListItem({
   item,
-  isCompleted,
+  variant,
 }: {
   item: Item;
-  isCompleted: boolean;
+  variant: 'ongoing' | 'completed' | 'my';
 }) {
-  const { name, currentPrice, endedAt, id, soldPrice } = item;
+  const { name, startPrice, currentPrice, endedAt, id, soldPrice, status } =
+    item;
 
   const [timeRemaining, setTimeRemaining] = useState<number | null>(null);
 
@@ -36,7 +37,70 @@ export default function ItemListItem({
     ? Math.floor((timeRemaining % (1000 * 60)) / 1000)
     : null;
 
-  const columnSize = isCompleted ? 4 : 3;
+  if (variant === 'ongoing') {
+    return (
+      <Grid
+        container
+        item
+        xs={12}
+        component={Paper}
+        marginTop={theme.spacing(1)}
+        marginBottom={theme.spacing(1)}
+        padding={theme.spacing(2)}
+        alignItems={'center'}
+      >
+        <Grid container item xs={3}>
+          <Typography variant="body1">{name}</Typography>
+        </Grid>
+        <Grid container item xs={3} justifyContent={'center'}>
+          <Typography variant="body1">{`$ ${currentPrice ?? 0}`}</Typography>
+        </Grid>
+        <Grid container item xs={3} justifyContent={'center'}>
+          <Typography variant="body1">
+            {`${hourRemaining ?? '--'}h ${minuteRemaining ?? '--'}m ${
+              secondRemaining ?? '--'
+            }s`}
+          </Typography>
+        </Grid>
+        <Grid container item xs={3} justifyContent={'flex-end'}>
+          <Button variant={'contained'} onClick={() => console.log(id)}>
+            Bid
+          </Button>
+        </Grid>
+      </Grid>
+    );
+  }
+
+  if (variant === 'completed') {
+    return (
+      <Grid
+        container
+        item
+        xs={12}
+        component={Paper}
+        marginTop={theme.spacing(1)}
+        marginBottom={theme.spacing(1)}
+        padding={theme.spacing(2)}
+        alignItems={'center'}
+      >
+        <Grid container item xs={4}>
+          <Typography variant="body1">{name}</Typography>
+        </Grid>
+        <Grid container item xs={4} justifyContent={'center'}>
+          <Typography variant="body1">
+            {`${new Date(endedAt).toLocaleDateString()} ${new Date(
+              endedAt,
+            ).toLocaleTimeString()}`}
+          </Typography>
+        </Grid>
+        <Grid container item xs={4} justifyContent={'flex-end'}>
+          <Typography variant="body1">
+            {soldPrice ? `$ ${soldPrice ?? 0}` : 'Not Sold'}
+          </Typography>
+        </Grid>
+      </Grid>
+    );
+  }
 
   return (
     <Grid
@@ -49,45 +113,33 @@ export default function ItemListItem({
       padding={theme.spacing(2)}
       alignItems={'center'}
     >
-      <Grid container item xs={columnSize}>
+      <Grid container item xs={3}>
         <Typography variant="body1">{name}</Typography>
       </Grid>
-      {!isCompleted && (
-        <Grid container item xs={columnSize} justifyContent={'center'}>
-          <Typography variant="body1">{`$ ${currentPrice ?? 0}`}</Typography>
-        </Grid>
-      )}
-
-      {!isCompleted && (
-        <>
-          <Grid container item xs={columnSize} justifyContent={'center'}>
-            <Typography variant="body1">
-              {`${hourRemaining ?? '--'}h ${minuteRemaining ?? '--'}m ${
+      <Grid container item xs={2} justifyContent={'center'}>
+        <Typography variant="body1">{`$ ${startPrice}`}</Typography>
+      </Grid>
+      <Grid container item xs={2} justifyContent={'center'}>
+        <Typography variant="body1">
+          {currentPrice != startPrice ? `$ ${currentPrice}` : 'No Bid'}
+        </Typography>
+      </Grid>
+      <Grid container item xs={3} justifyContent={'center'}>
+        <Typography variant="body1">
+          {status === ItemStatus.ACTIVE
+            ? `${hourRemaining ?? '--'}h ${minuteRemaining ?? '--'}m ${
                 secondRemaining ?? '--'
-              }s`}
-            </Typography>
-          </Grid>
-          <Grid container item xs={columnSize} justifyContent={'flex-end'}>
-            <Button variant={'contained'} onClick={() => console.log(id)}>
-              Bid
-            </Button>
-          </Grid>
-        </>
-      )}
-      {isCompleted && (
-        <>
-          <Grid container item xs={columnSize} justifyContent={'center'}>
-            <Typography variant="body1">
-              {`${new Date(endedAt).toLocaleDateString()} ${new Date(
+              }s`
+            : `${new Date(endedAt).toLocaleDateString()} ${new Date(
                 endedAt,
               ).toLocaleTimeString()}`}
-            </Typography>
-          </Grid>
-          <Grid container item xs={columnSize} justifyContent={'flex-end'}>
-            <Typography variant="body1">{`$ ${soldPrice ?? 0}`}</Typography>
-          </Grid>
-        </>
-      )}
+        </Typography>
+      </Grid>
+      <Grid container item xs={2} justifyContent={'flex-end'}>
+        <Typography variant="body1">
+          {soldPrice ? `$ ${soldPrice ?? 0}` : 'Not Sold'}
+        </Typography>
+      </Grid>
     </Grid>
   );
 }

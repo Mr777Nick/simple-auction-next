@@ -19,7 +19,7 @@ type ItemListProps = {
   mutate: () => void;
   setSize: (size: number) => void;
   data: Item[][] | undefined;
-  isCompleted: boolean;
+  variant: 'ongoing' | 'completed' | 'my';
 };
 
 export default function ItemList(props: ItemListProps) {
@@ -33,7 +33,7 @@ export default function ItemList(props: ItemListProps) {
     mutate,
     setSize,
     data,
-    isCompleted,
+    variant,
   } = props;
 
   return (
@@ -45,7 +45,7 @@ export default function ItemList(props: ItemListProps) {
         </Button>
       </Grid>
       <Grid container item xs={12}>
-        <ItemListHeader isCompleted={isCompleted} />
+        <ItemListHeader variant={variant} />
       </Grid>
       <Grid item xs={12}>
         <Divider flexItem />
@@ -56,7 +56,7 @@ export default function ItemList(props: ItemListProps) {
             return items.map((item) => {
               return (
                 <Fragment key={item.id}>
-                  <ItemListItem item={item} isCompleted={isCompleted} />
+                  <ItemListItem item={item} variant={variant} />
                 </Fragment>
               );
             });

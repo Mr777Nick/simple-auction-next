@@ -58,7 +58,7 @@ export default function CompletedItemsLayout() {
       mutate={mutate}
       setSize={setSize}
       data={data}
-      isCompleted={true}
+      variant={'completed'}
     />
   );
 }

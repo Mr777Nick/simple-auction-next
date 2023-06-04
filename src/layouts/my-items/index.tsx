@@ -10,15 +10,13 @@ import { Item } from '../../libs/types/item';
 
 const PAGE_SIZE = 5;
 
-export default function OngoingItemsLayout() {
+export default function MyItemsLayout() {
   const { tokenInfo } = useAuthContext();
 
-  const getOngoingItemsKey = (pageIndex: number, previousPageData: any[]) => {
+  const getMyItemsKey = (pageIndex: number, previousPageData: any[]) => {
     if (previousPageData && !previousPageData.length) return null;
 
-    return `${backendRoutes.items.ongoing}?page=${
-      pageIndex + 1
-    }&take=${PAGE_SIZE}`;
+    return `${backendRoutes.items.my}?page=${pageIndex + 1}&take=${PAGE_SIZE}`;
   };
 
   const { data, mutate, size, setSize, isValidating, isLoading, error } =
@@ -26,7 +24,7 @@ export default function OngoingItemsLayout() {
       Item[],
       Error,
       (pageIndex: number, previousPageData: any[]) => string | null
-    >(getOngoingItemsKey, (url) =>
+    >(getMyItemsKey, (url) =>
       getItems(url, {
         headers: {
           Authorization: `Bearer ${tokenInfo?.access_token}`,
@@ -49,7 +47,7 @@ export default function OngoingItemsLayout() {
 
   return (
     <ItemList
-      title={'Ongoing Items'}
+      title={'My Items'}
       isRefreshing={isRefreshing}
       isEmpty={isEmpty}
       isLoadingMore={isLoadingMore}
@@ -58,7 +56,7 @@ export default function OngoingItemsLayout() {
       mutate={mutate}
       setSize={setSize}
       data={data}
-      variant={'ongoing'}
+      variant={'my'}
     />
   );
 }
