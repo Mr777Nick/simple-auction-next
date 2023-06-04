@@ -18,7 +18,7 @@ export default function OngoingItemsLayout() {
 
     return `${backendRoutes.items.ongoing}?page=${
       pageIndex + 1
-    }&take=${PAGE_SIZE}`;
+    }&take=${PAGE_SIZE}&order=ASC`;
   };
 
   const { data, mutate, size, setSize, isValidating, isLoading, error } =
