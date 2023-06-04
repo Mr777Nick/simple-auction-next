@@ -1,3 +1,4 @@
+import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import Button from '@mui/material/Button';
 import Grid from '@mui/material/Grid';
@@ -10,21 +11,31 @@ import { useEffect, useState } from 'react';
 import theme from '../../../config/theme';
 import { Item, ItemStatus } from '../../../libs/types/item';
 import CreateUpdateItemDialog from '../../dialog/create-update-item';
+import DeleteItemDialog from '../../dialog/delete-item';
 
 export default function ItemListItem({
-  onSuccessEdit,
+  onSuccessAction,
   item,
   variant,
 }: {
-  onSuccessEdit: () => void;
+  onSuccessAction: () => void;
   item: Item;
   variant: 'ongoing' | 'completed' | 'my';
 }) {
-  const { name, startPrice, currentPrice, endedAt, id, soldPrice, status } =
-    item;
+  const {
+    name,
+    startPrice,
+    currentPrice,
+    endedAt,
+    id,
+    soldPrice,
+    status,
+    itemBids,
+  } = item;
 
   const [timeRemaining, setTimeRemaining] = useState<number | null>(null);
   const [openUpdateDialog, setOpenUpdateDialog] = useState(false);
+  const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -158,6 +169,7 @@ export default function ItemListItem({
           >
             <span>
               <IconButton
+                size={'small'}
                 disabled={status !== ItemStatus.ACTIVE}
                 color={'primary'}
                 onClick={() => setOpenUpdateDialog(true)}
@@ -166,14 +178,42 @@ export default function ItemListItem({
               </IconButton>
             </span>
           </Tooltip>
+          <Tooltip
+            title={
+              status !== ItemStatus.ACTIVE || itemBids.length > 0
+                ? 'Completed item or item with active bid cannot be deleted'
+                : ''
+            }
+          >
+            <span>
+              <IconButton
+                size={'small'}
+                disabled={status !== ItemStatus.ACTIVE || itemBids.length > 0}
+                color={'error'}
+                onClick={() => setOpenDeleteDialog(true)}
+              >
+                <DeleteIcon />
+              </IconButton>
+            </span>
+          </Tooltip>
         </Grid>
       </Grid>
       <CreateUpdateItemDialog
-        onSuccess={onSuccessEdit}
+        onSuccess={onSuccessAction}
         open={openUpdateDialog}
         setOpen={setOpenUpdateDialog}
         isEdit
         item={item}
+      />
+      <DeleteItemDialog
+        onSuccess={onSuccessAction}
+        open={openDeleteDialog}
+        setOpen={setOpenDeleteDialog}
+        item={item}
+        title={'Delete Item'}
+        description={
+          'Are you sure you want to delete this item? This action is irreversible.'
+        }
       />
     </>
   );

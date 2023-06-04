@@ -57,3 +57,33 @@ export async function createUpdateItemBackendCall(
 
   return response;
 }
+
+export type DeleteItemBackendCall = {
+  id: string;
+  token?: string;
+};
+
+export async function deleteItemBackendCall(
+  url: BackendCallURL,
+  { arg: { id, token } }: { arg: DeleteItemBackendCall },
+) {
+  const fetchOptions = {
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`,
+    },
+    method: 'DELETE',
+  };
+
+  const res = await fetch(`${url}/${id}`, fetchOptions);
+
+  const response = await res.json();
+
+  if (!res.ok) {
+    const error = new Error(response.message);
+
+    throw error;
+  }
+
+  return response;
+}

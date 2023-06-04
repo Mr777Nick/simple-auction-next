@@ -83,7 +83,7 @@ export default function ItemList(props: ItemListProps) {
                     <ItemListItem
                       item={item}
                       variant={variant}
-                      onSuccessEdit={mutate}
+                      onSuccessAction={mutate}
                     />
                   </Fragment>
                 );
