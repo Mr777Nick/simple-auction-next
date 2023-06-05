@@ -87,3 +87,35 @@ export async function deleteItemBackendCall(
 
   return response;
 }
+
+export type CreateItemBidBackendCall = {
+  bidPrice: number;
+  id: string;
+  token?: string;
+};
+
+export async function createItemBidBackendCall(
+  url: BackendCallURL,
+  { arg: { bidPrice, id, token } }: { arg: CreateItemBidBackendCall },
+) {
+  const fetchOptions = {
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`,
+    },
+    method: 'POST',
+    body: JSON.stringify({ itemId: id, price: bidPrice }),
+  };
+
+  const res = await fetch(url, fetchOptions);
+
+  const response = await res.json();
+
+  if (!res.ok) {
+    const error = new Error(response.message);
+
+    throw error;
+  }
+
+  return response;
+}

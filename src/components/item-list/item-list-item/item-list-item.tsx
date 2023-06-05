@@ -7,11 +7,13 @@ import Paper from '@mui/material/Paper';
 import Tooltip from '@mui/material/Tooltip';
 import Typography from '@mui/material/Typography';
 import { useEffect, useState } from 'react';
+import { set } from 'react-hook-form';
 
 import theme from '../../../config/theme';
 import { Item, ItemStatus } from '../../../libs/types/item';
 import CreateUpdateItemDialog from '../../dialog/create-update-item';
 import DeleteItemDialog from '../../dialog/delete-item';
+import CreateItemBidDialog from '../../dialog/item-bid';
 
 export default function ItemListItem({
   onSuccessAction,
@@ -31,9 +33,11 @@ export default function ItemListItem({
     soldPrice,
     status,
     itemBids,
+    isMine,
   } = item;
 
   const [timeRemaining, setTimeRemaining] = useState<number | null>(null);
+  const [openBidDialog, setOpenBidDialog] = useState(false);
   const [openUpdateDialog, setOpenUpdateDialog] = useState(false);
   const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
 
@@ -57,35 +61,51 @@ export default function ItemListItem({
 
   if (variant === 'ongoing') {
     return (
-      <Grid
-        container
-        item
-        xs={12}
-        component={Paper}
-        marginTop={theme.spacing(1)}
-        marginBottom={theme.spacing(1)}
-        padding={theme.spacing(2)}
-        alignItems={'center'}
-      >
-        <Grid container item xs={3}>
-          <Typography variant="body1">{name}</Typography>
+      <>
+        <Grid
+          container
+          item
+          xs={12}
+          component={Paper}
+          marginTop={theme.spacing(1)}
+          marginBottom={theme.spacing(1)}
+          padding={theme.spacing(2)}
+          alignItems={'center'}
+        >
+          <Grid container item xs={3}>
+            <Typography variant="body1">{name}</Typography>
+          </Grid>
+          <Grid container item xs={3} justifyContent={'center'}>
+            <Typography variant="body1">{`$ ${currentPrice ?? 0}`}</Typography>
+          </Grid>
+          <Grid container item xs={3} justifyContent={'center'}>
+            <Typography variant="body1">
+              {`${hourRemaining ?? '--'}h ${minuteRemaining ?? '--'}m ${
+                secondRemaining ?? '--'
+              }s`}
+            </Typography>
+          </Grid>
+          <Grid container item xs={3} justifyContent={'flex-end'}>
+            <Tooltip title={isMine ? 'Cannot bid your own item' : ''}>
+              <span>
+                <Button
+                  disabled={isMine}
+                  variant={'contained'}
+                  onClick={() => setOpenBidDialog(true)}
+                >
+                  Bid
+                </Button>
+              </span>
+            </Tooltip>
+          </Grid>
         </Grid>
-        <Grid container item xs={3} justifyContent={'center'}>
-          <Typography variant="body1">{`$ ${currentPrice ?? 0}`}</Typography>
-        </Grid>
-        <Grid container item xs={3} justifyContent={'center'}>
-          <Typography variant="body1">
-            {`${hourRemaining ?? '--'}h ${minuteRemaining ?? '--'}m ${
-              secondRemaining ?? '--'
-            }s`}
-          </Typography>
-        </Grid>
-        <Grid container item xs={3} justifyContent={'flex-end'}>
-          <Button variant={'contained'} onClick={() => console.log(id)}>
-            Bid
-          </Button>
-        </Grid>
-      </Grid>
+        <CreateItemBidDialog
+          open={openBidDialog}
+          setOpen={setOpenBidDialog}
+          item={item}
+          onSuccess={onSuccessAction}
+        />
+      </>
     );
   }
 

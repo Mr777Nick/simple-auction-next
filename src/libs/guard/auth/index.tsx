@@ -1,8 +1,18 @@
 import { useRouter } from 'next/router';
+import { enqueueSnackbar } from 'notistack';
 import { ReactNode, useEffect } from 'react';
+import useSWRMutation from 'swr/mutation';
 
 import { ROUTES } from '../../../enums/routes';
+import { backendRoutes } from '../../api/backend/routes';
+import {
+  GetUserBackendCall,
+  getUserBackendCall,
+} from '../../api/backend-apis/users';
 import { useAuthContext } from '../../context/auth';
+import { BackendCallURL } from '../../types/backend-call';
+import { BackendResponse } from '../../types/backend-response';
+import { User } from '../../types/user';
 
 export const AuthGuard = ({
   needAuth = true,
@@ -11,7 +21,8 @@ export const AuthGuard = ({
   needAuth?: boolean;
   children?: ReactNode;
 }) => {
-  const { isContextInitialised, tokenInfo } = useAuthContext();
+  const { isContextInitialised, tokenInfo, signOut, saveUser } =
+    useAuthContext();
   const router = useRouter();
 
   useEffect(() => {
@@ -25,6 +36,44 @@ export const AuthGuard = ({
       router.push(ROUTES.HOME);
     }
   }, [needAuth, router, tokenInfo]);
+
+  const token = tokenInfo?.access_token ?? '';
+  const url = backendRoutes.users.profile;
+
+  const { data, error, trigger } = useSWRMutation<
+    BackendResponse<User>,
+    Error,
+    BackendCallURL,
+    GetUserBackendCall
+  >(url, getUserBackendCall);
+
+  useEffect(() => {
+    if (data && data.data && !error) {
+      saveUser(data.data);
+    }
+  }, [data, error, saveUser]);
+
+  useEffect(() => {
+    let intervalId: string | number | NodeJS.Timeout | undefined;
+    if (needAuth && tokenInfo) {
+      trigger({ token });
+      intervalId = setInterval(() => {
+        trigger({ token });
+      }, 5000);
+    } else {
+      clearInterval(intervalId);
+    }
+    return () => clearInterval(intervalId);
+  }, [needAuth, token, tokenInfo, trigger]);
+
+  useEffect(() => {
+    if (Number(error?.stack) === 401) {
+      signOut();
+      enqueueSnackbar('Your session has expired. Please sign in again.', {
+        variant: 'error',
+      });
+    }
+  }, [error, signOut]);
 
   if (needAuth && !tokenInfo) {
     return null;

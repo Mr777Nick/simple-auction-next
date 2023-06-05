@@ -1,6 +1,13 @@
 import { BackendCallURL } from '../../../types/backend-call';
 
-export async function getUserBackendCall(url: BackendCallURL, token: string) {
+export type GetUserBackendCall = {
+  token: string;
+};
+
+export async function getUserBackendCall(
+  url: BackendCallURL,
+  { arg: { token } }: { arg: GetUserBackendCall },
+) {
   const res = await fetch(url, {
     method: 'GET',
     headers: {
@@ -13,6 +20,7 @@ export async function getUserBackendCall(url: BackendCallURL, token: string) {
 
   if (!res.ok) {
     const error = new Error(response.message);
+    if (response?.statusCode) error.stack = response?.statusCode;
 
     throw error;
   }

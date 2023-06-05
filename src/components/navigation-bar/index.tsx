@@ -24,6 +24,7 @@ import { useAuthContext } from '../../libs/context/auth';
 
 import NavigationItem from './navigation-item';
 import LogoutNavigationItem from './sign-out';
+import UserNavigationItem from './user';
 
 const drawerWidth = 240;
 
@@ -159,6 +160,8 @@ export default function NavigationBar({
             <NavigationItem key={text} text={text} url={url} icon={icon} />
           ))}
         </List>
+        <Divider />
+        <UserNavigationItem />
         <Divider />
         <LogoutNavigationItem />
       </Drawer>

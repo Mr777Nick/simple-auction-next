@@ -72,6 +72,8 @@ export const AuthContextProvider = (props: {
     (user: User) => {
       const { name, balance } = user;
 
+      setUser(user);
+
       setCookie(`user_name_${authName}`, name);
       setCookie(`user_balance_${authName}`, balance);
     },

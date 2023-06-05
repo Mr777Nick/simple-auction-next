@@ -11,6 +11,7 @@ export type Item = {
   startPrice: number;
   status: ItemStatus;
   user: User;
+  isMine?: boolean;
 };
 
 export enum ItemStatus {

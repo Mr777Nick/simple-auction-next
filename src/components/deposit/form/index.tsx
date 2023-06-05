@@ -1,6 +1,7 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import Alert from '@mui/material/Alert';
 import Button from '@mui/material/Button';
+import DialogActions from '@mui/material/DialogActions';
 import Grid from '@mui/material/Grid';
 import Stack from '@mui/material/Stack';
 import TextField from '@mui/material/TextField';
@@ -28,17 +29,30 @@ const schema = yup.object({
 
 export type DepositFormValue = yup.InferType<typeof schema>;
 
-export default function DepositForm() {
+type DepositFormProps = {
+  amount?: number;
+  isForDialog?: boolean;
+  handleClose?: () => void;
+};
+
+export default function DepositForm(props: DepositFormProps) {
+  const { amount, isForDialog, handleClose } = props;
+
   const { tokenInfo } = useAuthContext();
 
   const {
     handleSubmit,
     formState: { errors },
     control,
+    setValue,
   } = useForm<DepositFormValue>({
     resolver: yupResolver(schema),
     mode: 'all',
   });
+
+  useEffect(() => {
+    if (amount) setValue('amount', amount);
+  }, [amount, setValue]);
 
   const { trigger, data, error, isMutating } = useSWRMutation<
     BackendResponse<null>,
@@ -58,8 +72,9 @@ export default function DepositForm() {
   useEffect(() => {
     if (data) {
       enqueueSnackbar('Successfully deposit balance', { variant: 'success' });
+      if (handleClose) handleClose();
     }
-  }, [data]);
+  }, [data, handleClose]);
 
   useEffect(() => {
     if (error) {
@@ -72,11 +87,6 @@ export default function DepositForm() {
 
   return (
     <>
-      <Grid container item xs={12} justifyContent={'center'}>
-        <Typography variant="h5" marginRight={theme.spacing(1)}>
-          Deposit
-        </Typography>
-      </Grid>
       <Grid
         component="form"
         onSubmit={handleSubmit(onSubmit)}
@@ -115,15 +125,25 @@ export default function DepositForm() {
             />
           )}
         />
-        <Button
-          type="submit"
-          fullWidth
-          variant="contained"
-          sx={{ mt: 3, mb: 2 }}
-          disabled={isMutating}
-        >
-          {isMutating ? 'Depositing...' : 'Deposit'}
-        </Button>
+        {!isForDialog && (
+          <Button
+            type="submit"
+            fullWidth
+            variant="contained"
+            sx={{ mt: 3, mb: 2 }}
+            disabled={isMutating}
+          >
+            {isMutating ? 'Depositing...' : 'Deposit'}
+          </Button>
+        )}
+        {isForDialog && (
+          <DialogActions>
+            <Button onClick={handleClose}>Cancel</Button>
+            <Button disabled={isMutating} type={'submit'}>
+              {isMutating ? 'Depositing...' : 'Deposit'}
+            </Button>
+          </DialogActions>
+        )}
       </Grid>
     </>
   );
