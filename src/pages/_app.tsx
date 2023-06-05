@@ -9,12 +9,15 @@ import NextNProgress from 'nextjs-progressbar';
 import { SnackbarProvider } from 'notistack';
 import { SWRConfig } from 'swr';
 
+import initSentry from '../../sentry';
 import NavigationBar from '../components/navigation-bar';
 import createEmotionCache from '../config/create-emotion-cache';
 import theme from '../config/theme';
 import { ROUTES } from '../enums/routes';
 import { fetcher } from '../libs/api/backend-apis/fetcher';
 import { AuthContextProvider } from '../libs/context/auth';
+
+initSentry();
 
 const clientSideEmotionCache = createEmotionCache();
 
