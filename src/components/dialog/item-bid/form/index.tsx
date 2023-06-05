@@ -66,7 +66,11 @@ export default function CreateItemBidDialogDialogForm({
 
   const onSubmit = async (data: CreateItemBidDialogDialogFormValue) => {
     try {
-      if (user?.balance && user?.balance < data.bidPrice) {
+      if (
+        user?.balance !== undefined &&
+        user?.balance !== null &&
+        user?.balance < data.bidPrice
+      ) {
         setOpenDepositDialog(true);
       } else {
         await trigger({ ...data, token: tokenInfo?.access_token });

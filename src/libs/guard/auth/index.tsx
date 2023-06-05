@@ -1,6 +1,6 @@
 import { useRouter } from 'next/router';
 import { enqueueSnackbar } from 'notistack';
-import { ReactNode, useEffect } from 'react';
+import { ReactNode, useEffect, useState } from 'react';
 import useSWRMutation from 'swr/mutation';
 
 import { ROUTES } from '../../../enums/routes';
@@ -66,14 +66,20 @@ export const AuthGuard = ({
     return () => clearInterval(intervalId);
   }, [needAuth, token, tokenInfo, trigger]);
 
+  const [numberOfFailedAttempts, setNumberOfFailedAttempts] = useState(0);
+
   useEffect(() => {
-    if (Number(error?.stack) === 401) {
+    if (Number(error?.stack) === 401 && numberOfFailedAttempts > 2) {
       signOut();
       enqueueSnackbar('Your session has expired. Please sign in again.', {
         variant: 'error',
       });
+    } else if (Number(error?.stack) === 401) {
+      setNumberOfFailedAttempts(numberOfFailedAttempts + 1);
+    } else {
+      setNumberOfFailedAttempts(0);
     }
-  }, [error, signOut]);
+  }, [error, numberOfFailedAttempts, signOut]);
 
   if (needAuth && !tokenInfo) {
     return null;

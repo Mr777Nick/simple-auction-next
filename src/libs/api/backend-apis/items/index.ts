@@ -119,3 +119,23 @@ export async function createItemBidBackendCall(
 
   return response;
 }
+
+export async function getItemBids(url: RequestInfo | URL, init?: RequestInit) {
+  const headers = {
+    'Content-Type': 'application/json',
+  };
+
+  const fetchOptions = {
+    ...init,
+    headers: {
+      ...init?.headers,
+      ...headers,
+    },
+  };
+
+  const res = await fetcher(url, fetchOptions).catch((error) => {
+    throw error;
+  });
+
+  return res.data.result;
+}
