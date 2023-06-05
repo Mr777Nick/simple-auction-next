@@ -6,7 +6,6 @@ import { useAuthContext } from '../../libs/context/auth';
 
 export default function Balance() {
   const { user } = useAuthContext();
-  console.log(user);
 
   return (
     <Grid
@@ -17,7 +16,9 @@ export default function Balance() {
       marginBottom={theme.spacing(1)}
     >
       <Typography variant="h6">
-        {`Current Balance: $ ${user?.balance}`}
+        {user?.balance
+          ? `Current Balance: $ ${user?.balance}`
+          : `Current Balance: $ N\/A/`}
       </Typography>
     </Grid>
   );

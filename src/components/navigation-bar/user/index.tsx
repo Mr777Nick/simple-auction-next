@@ -1,7 +1,6 @@
 import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
 import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
-import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import React from 'react';
 
@@ -14,7 +13,7 @@ export default function UserNavigationItem() {
     <>
       <ListItem disablePadding>
         <ListItemButton>
-          <ListItemText primary={user?.name ?? ''} />
+          <ListItemText data-testid={'user-name'} primary={user?.name ?? ''} />
         </ListItemButton>
       </ListItem>
       <ListItem disablePadding>
@@ -25,7 +24,7 @@ export default function UserNavigationItem() {
       <ListItem disablePadding>
         <ListItemButton>
           <AttachMoneyIcon />
-          <ListItemText primary={user?.balance} />
+          <ListItemText data-testid={'user-balance'} primary={user?.balance} />
         </ListItemButton>
       </ListItem>
     </>

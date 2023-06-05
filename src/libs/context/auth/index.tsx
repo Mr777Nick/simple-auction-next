@@ -24,13 +24,24 @@ export const AuthContext = createContext<null | {
 export const AuthContextProvider = (props: {
   children: ReactNode;
   authName: string;
+  initialValue?: {
+    tokenInfo?: TokenInfo;
+    user?: User;
+  };
 }) => {
-  const { authName } = props;
+  const { authName, initialValue } = props;
 
   const [isContextInitialised, setInitialised] = useState(false);
 
   const [tokenInfo, setTokenInfo] = useState<TokenInfo | null>(null);
   const [user, setUser] = useState<User | null>(null);
+
+  useEffect(() => {
+    if (initialValue) {
+      setTokenInfo(initialValue.tokenInfo ?? null);
+      setUser(initialValue.user ?? null);
+    }
+  }, [initialValue]);
 
   const persistTokenInfo = useCallback(
     (tokenInfo: TokenInfo) => {
