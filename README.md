@@ -1,38 +1,80 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+<p align="center">
+  <a href="http://nextjs.org/" target="blank"><img src="https://upload.wikimedia.org/wikipedia/commons/8/8e/Nextjs-logo.svg" width="320" alt="Next Logo" /></a>
+</p>
 
-## Getting Started
+[![Commitizen friendly](https://img.shields.io/badge/commitizen-friendly-brightgreen.svg)](http://commitizen.github.io/cz-cli/)
 
-First, run the development server:
+# Simple Auction Frontend
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-```
+## Summary
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+The frontend that is being used for the Simple Auction System. Made using [Next JS](https://nextjs.org) framework.
 
-You can start editing the page by modifying `pages/index.tsx`. The page auto-updates as you edit the file.
+- Dev: **Not deployed yet**
+- Prod: **Not deployed yet**
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.ts`.
+For more settings, configurations and complete setup, go here: [Next JS Documentation](https://nextjs.org/docs/pages)
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
+## Tech Stacks and Features
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+- [Material UI](https://mui.com/), for UI components
+- [React Hook Form](https://react-hook-form.com/) and [Yup](https://github.com/jquense/yup) for form validation
+- [Next JS Progressbar](https://github.com/apal21/nextjs-progressbar), for progressbar between pages
+- [Notistack](https://notistack.com/), for managing snackbar usign provider and hooks
+- [Dayjs](https://day.js.org/), for date utils functions and MUI date picker adapter
+- [Cookies Next](https://github.com/andreizanik/cookies-next), for managing authentication cookies
+- [SWR](https://swr.vercel.app/), for data fetching, infinite load, and mutation
+- [Sentry](https://sentry.io/), for error reporting
+- [Eslint](https://eslint.org/) and [Prettier](https://prettier.io/), for code standarization
+- [Husky](https://typicode.github.io/husky/), for git hooks
+- [Commitizen](https://github.com/commitizen/cz-cli), for commit messages standarization
+- [Jest](https://jestjs.io/docs/) and [React Test Library](https://testing-library.com/), for unit testing
+- [Next JS](https://nextjs.org/docs) features used:
+  - [Pages Router](https://nextjs.org/docs/pages), for managing routes
+  - [Testing](https://nextjs.org/docs/pages/building-your-application/optimizing/testing), for setup testing configurations
+  - [ESLint](https://nextjs.org/docs/pages/building-your-application/configuring/eslint), for setup ESLint
+  - [Environment Variables](https://nextjs.org/docs/pages/building-your-application/configuring/environment-variables), for managing environment variables
+  - [Static Exports](https://nextjs.org/docs/pages/building-your-application/deploying/static-exports), for exporting web as static HTML/JS files
 
-## Learn More
+## Installation
 
-To learn more about Next.js, take a look at the following resources:
+1. Go to [Sentry dashboard](https://sentry.io/), create a project on it, then take note of the project's client key (DSN).
+2. Set up the .env with all the required information of the project prerequisites (Sentry DSN, app name, and backend server url).
+3. Run one of these commands:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- `npm run dev` to start local development.
+- `npm run start` to start in production mode.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+## Usage
 
-## Deploy on Vercel
+### To Run Locally
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+1. Create `.env.local` file, then set up the .env with all the required information of the project prerequisites (Sentry DSN, app name, and backend server url).
+2. Run `npm run dev` to start local development.
+3. Server will be running on `localhost:4000`.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+### To Deploy to Prod Environment
+
+**TBD**
+
+## Depending Services
+
+- [Backend](https://github.com/Mr777Nick/simple-auction-nest)
+
+## Dependent Services
+
+None
+
+## Technical Debt
+
+None
+
+## Known Issues
+
+- Users may occasionally gets signed out automatically when there's an error with the backend connection to Supabase Auth
+
+## Tests
+
+Run one of these commands:
+
+- `npm run test` to start unit tests.
