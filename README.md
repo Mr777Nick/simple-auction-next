@@ -78,3 +78,4 @@ None
 Run one of these commands:
 
 - `npm run test` to start unit tests.
+- `npm run test:watch` to start unit tests in watch mode.
