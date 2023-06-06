@@ -16,7 +16,7 @@ export default function Balance() {
       marginBottom={theme.spacing(1)}
     >
       <Typography variant="h6">
-        {user?.balance
+        {user?.balance !== undefined && user?.balance !== null
           ? `Current Balance: $ ${user?.balance}`
           : `Current Balance: $ N\/A/`}
       </Typography>
