@@ -59,6 +59,8 @@ export default function ItemListItem({
     ? Math.floor((timeRemaining % (1000 * 60)) / 1000)
     : null;
 
+  if (variant === 'ongoing' && timeRemaining && timeRemaining < 0) return null;
+
   if (variant === 'ongoing') {
     return (
       <>
