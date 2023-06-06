@@ -10,13 +10,13 @@
 
 The frontend that is being used for the Simple Auction System. Made using [Next JS](https://nextjs.org) framework.
 
-- Dev: **Not deployed yet**
-- Prod: **Not deployed yet**
+- Prod: https://simple-auction-next.vercel.app/
 
 For more settings, configurations and complete setup, go here: [Next JS Documentation](https://nextjs.org/docs/pages)
 
 ## Tech Stacks and Features
 
+- [Vercel](https://vercel.com/), for hosting and deployment
 - [Material UI](https://mui.com/), for UI components
 - [React Hook Form](https://react-hook-form.com/) and [Yup](https://github.com/jquense/yup) for form validation
 - [Next JS Progressbar](https://github.com/apal21/nextjs-progressbar), for progressbar between pages
@@ -55,7 +55,10 @@ For more settings, configurations and complete setup, go here: [Next JS Document
 
 ### To Deploy to Prod Environment
 
-**TBD**
+1. Create a project on Vercel, link the project to this repository, authorize Github account with Vercel.
+2. Config environment variables on the vercel dashboard with all the required information of the project prerequisites (Sentry DSN, app name, and backend server url).
+3. Deploy the project on vercel, take note of the url generated for the web.
+4. Any newer commits to the main branch of the repository will automatically trigger the deployment.
 
 ## Depending Services
 
